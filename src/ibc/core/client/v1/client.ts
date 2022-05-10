@@ -2,6 +2,7 @@
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Any } from "../../../../google/protobuf/any";
+import { Plan } from "../../../../cosmos/upgrade/v1beta1/upgrade";
 
 /**
  * IdentifiedClientState defines a client state with an additional client
@@ -14,7 +15,10 @@ export interface IdentifiedClientState {
   clientState?: Any;
 }
 
-/** ConsensusStateWithHeight defines a consensus state with an additional height field. */
+/**
+ * ConsensusStateWithHeight defines a consensus state with an additional height
+ * field.
+ */
 export interface ConsensusStateWithHeight {
   /** consensus state height */
   height?: Height;
@@ -34,9 +38,10 @@ export interface ClientConsensusStates {
 }
 
 /**
- * ClientUpdateProposal is a governance proposal. If it passes, the client is
- * updated with the provided header. The update may fail if the header is not
- * valid given certain conditions specified by the client implementation.
+ * ClientUpdateProposal is a governance proposal. If it passes, the substitute
+ * client's latest consensus state is copied over to the subject client. The proposal
+ * handler may fail if the subject and the substitute do not match in client and
+ * chain parameters (with exception to latest height, frozen height, and chain-id).
  */
 export interface ClientUpdateProposal {
   /** the title of the update proposal */
@@ -44,9 +49,31 @@ export interface ClientUpdateProposal {
   /** the description of the proposal */
   description: string;
   /** the client identifier for the client to be updated if the proposal passes */
-  clientId: string;
-  /** the header used to update the client if the proposal passes */
-  header?: Any;
+  subjectClientId: string;
+  /**
+   * the substitute client identifier for the client standing in for the subject
+   * client
+   */
+  substituteClientId: string;
+}
+
+/**
+ * UpgradeProposal is a gov Content type for initiating an IBC breaking
+ * upgrade.
+ */
+export interface UpgradeProposal {
+  title: string;
+  description: string;
+  plan?: Plan;
+  /**
+   * An UpgradedClientState must be provided to perform an IBC breaking upgrade.
+   * This will make the chain commit to the correct upgraded (self) client state
+   * before the upgrade occurs, so that connecting chains can verify that the
+   * new upgraded client is valid by verifying a proof on the previous version
+   * of the chain. This will allow IBC connections to persist smoothly across
+   * planned chain upgrades
+   */
+  upgradedClientState?: Any;
 }
 
 /**
@@ -54,11 +81,12 @@ export interface ClientUpdateProposal {
  * that can be compared against another Height for the purposes of updating and
  * freezing clients
  *
- * Normally the RevisionHeight is incremented at each height while keeping RevisionNumber
- * the same. However some consensus algorithms may choose to reset the
- * height in certain conditions e.g. hard forks, state-machine breaking changes
- * In these cases, the RevisionNumber is incremented so that height continues to
- * be monitonically increasing even as the RevisionHeight gets reset
+ * Normally the RevisionHeight is incremented at each height while keeping
+ * RevisionNumber the same. However some consensus algorithms may choose to
+ * reset the height in certain conditions e.g. hard forks, state-machine
+ * breaking changes In these cases, the RevisionNumber is incremented so that
+ * height continues to be monitonically increasing even as the RevisionHeight
+ * gets reset
  */
 export interface Height {
   /** the revision that the client is currently on */
@@ -346,7 +374,8 @@ export const ClientConsensusStates = {
 const baseClientUpdateProposal: object = {
   title: "",
   description: "",
-  clientId: "",
+  subjectClientId: "",
+  substituteClientId: "",
 };
 
 export const ClientUpdateProposal = {
@@ -360,11 +389,11 @@ export const ClientUpdateProposal = {
     if (message.description !== "") {
       writer.uint32(18).string(message.description);
     }
-    if (message.clientId !== "") {
-      writer.uint32(26).string(message.clientId);
+    if (message.subjectClientId !== "") {
+      writer.uint32(26).string(message.subjectClientId);
     }
-    if (message.header !== undefined) {
-      Any.encode(message.header, writer.uint32(34).fork()).ldelim();
+    if (message.substituteClientId !== "") {
+      writer.uint32(34).string(message.substituteClientId);
     }
     return writer;
   },
@@ -386,10 +415,10 @@ export const ClientUpdateProposal = {
           message.description = reader.string();
           break;
         case 3:
-          message.clientId = reader.string();
+          message.subjectClientId = reader.string();
           break;
         case 4:
-          message.header = Any.decode(reader, reader.uint32());
+          message.substituteClientId = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -411,15 +440,21 @@ export const ClientUpdateProposal = {
     } else {
       message.description = "";
     }
-    if (object.clientId !== undefined && object.clientId !== null) {
-      message.clientId = String(object.clientId);
+    if (
+      object.subjectClientId !== undefined &&
+      object.subjectClientId !== null
+    ) {
+      message.subjectClientId = String(object.subjectClientId);
     } else {
-      message.clientId = "";
+      message.subjectClientId = "";
     }
-    if (object.header !== undefined && object.header !== null) {
-      message.header = Any.fromJSON(object.header);
+    if (
+      object.substituteClientId !== undefined &&
+      object.substituteClientId !== null
+    ) {
+      message.substituteClientId = String(object.substituteClientId);
     } else {
-      message.header = undefined;
+      message.substituteClientId = "";
     }
     return message;
   },
@@ -429,9 +464,10 @@ export const ClientUpdateProposal = {
     message.title !== undefined && (obj.title = message.title);
     message.description !== undefined &&
       (obj.description = message.description);
-    message.clientId !== undefined && (obj.clientId = message.clientId);
-    message.header !== undefined &&
-      (obj.header = message.header ? Any.toJSON(message.header) : undefined);
+    message.subjectClientId !== undefined &&
+      (obj.subjectClientId = message.subjectClientId);
+    message.substituteClientId !== undefined &&
+      (obj.substituteClientId = message.substituteClientId);
     return obj;
   },
 
@@ -447,15 +483,144 @@ export const ClientUpdateProposal = {
     } else {
       message.description = "";
     }
-    if (object.clientId !== undefined && object.clientId !== null) {
-      message.clientId = object.clientId;
+    if (
+      object.subjectClientId !== undefined &&
+      object.subjectClientId !== null
+    ) {
+      message.subjectClientId = object.subjectClientId;
     } else {
-      message.clientId = "";
+      message.subjectClientId = "";
     }
-    if (object.header !== undefined && object.header !== null) {
-      message.header = Any.fromPartial(object.header);
+    if (
+      object.substituteClientId !== undefined &&
+      object.substituteClientId !== null
+    ) {
+      message.substituteClientId = object.substituteClientId;
     } else {
-      message.header = undefined;
+      message.substituteClientId = "";
+    }
+    return message;
+  },
+};
+
+const baseUpgradeProposal: object = { title: "", description: "" };
+
+export const UpgradeProposal = {
+  encode(
+    message: UpgradeProposal,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.title !== "") {
+      writer.uint32(10).string(message.title);
+    }
+    if (message.description !== "") {
+      writer.uint32(18).string(message.description);
+    }
+    if (message.plan !== undefined) {
+      Plan.encode(message.plan, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.upgradedClientState !== undefined) {
+      Any.encode(
+        message.upgradedClientState,
+        writer.uint32(34).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): UpgradeProposal {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseUpgradeProposal } as UpgradeProposal;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.title = reader.string();
+          break;
+        case 2:
+          message.description = reader.string();
+          break;
+        case 3:
+          message.plan = Plan.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.upgradedClientState = Any.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): UpgradeProposal {
+    const message = { ...baseUpgradeProposal } as UpgradeProposal;
+    if (object.title !== undefined && object.title !== null) {
+      message.title = String(object.title);
+    } else {
+      message.title = "";
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = String(object.description);
+    } else {
+      message.description = "";
+    }
+    if (object.plan !== undefined && object.plan !== null) {
+      message.plan = Plan.fromJSON(object.plan);
+    } else {
+      message.plan = undefined;
+    }
+    if (
+      object.upgradedClientState !== undefined &&
+      object.upgradedClientState !== null
+    ) {
+      message.upgradedClientState = Any.fromJSON(object.upgradedClientState);
+    } else {
+      message.upgradedClientState = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: UpgradeProposal): unknown {
+    const obj: any = {};
+    message.title !== undefined && (obj.title = message.title);
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.plan !== undefined &&
+      (obj.plan = message.plan ? Plan.toJSON(message.plan) : undefined);
+    message.upgradedClientState !== undefined &&
+      (obj.upgradedClientState = message.upgradedClientState
+        ? Any.toJSON(message.upgradedClientState)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<UpgradeProposal>): UpgradeProposal {
+    const message = { ...baseUpgradeProposal } as UpgradeProposal;
+    if (object.title !== undefined && object.title !== null) {
+      message.title = object.title;
+    } else {
+      message.title = "";
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = object.description;
+    } else {
+      message.description = "";
+    }
+    if (object.plan !== undefined && object.plan !== null) {
+      message.plan = Plan.fromPartial(object.plan);
+    } else {
+      message.plan = undefined;
+    }
+    if (
+      object.upgradedClientState !== undefined &&
+      object.upgradedClientState !== null
+    ) {
+      message.upgradedClientState = Any.fromPartial(object.upgradedClientState);
+    } else {
+      message.upgradedClientState = undefined;
     }
     return message;
   },

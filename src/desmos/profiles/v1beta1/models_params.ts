@@ -58,11 +58,6 @@ export interface OracleParams {
    */
   executeGas: Long;
   /**
-   * FeePayer represents the key of the account that is going to pay for oracle
-   * fees if needed
-   */
-  feePayer: string;
-  /**
    * FeeAmount represents the amount of fees to be payed in order to execute the
    * oracle script
    */
@@ -430,12 +425,11 @@ export const BioParams = {
 };
 
 const baseOracleParams: object = {
-  scriptId: Long.ZERO,
+  scriptId: Long.UZERO,
   askCount: Long.UZERO,
   minCount: Long.UZERO,
   prepareGas: Long.UZERO,
   executeGas: Long.UZERO,
-  feePayer: "",
 };
 
 export const OracleParams = {
@@ -444,7 +438,7 @@ export const OracleParams = {
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (!message.scriptId.isZero()) {
-      writer.uint32(8).int64(message.scriptId);
+      writer.uint32(8).uint64(message.scriptId);
     }
     if (!message.askCount.isZero()) {
       writer.uint32(16).uint64(message.askCount);
@@ -458,11 +452,8 @@ export const OracleParams = {
     if (!message.executeGas.isZero()) {
       writer.uint32(40).uint64(message.executeGas);
     }
-    if (message.feePayer !== "") {
-      writer.uint32(50).string(message.feePayer);
-    }
     for (const v of message.feeAmount) {
-      Coin.encode(v!, writer.uint32(58).fork()).ldelim();
+      Coin.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -476,7 +467,7 @@ export const OracleParams = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.scriptId = reader.int64() as Long;
+          message.scriptId = reader.uint64() as Long;
           break;
         case 2:
           message.askCount = reader.uint64() as Long;
@@ -491,9 +482,6 @@ export const OracleParams = {
           message.executeGas = reader.uint64() as Long;
           break;
         case 6:
-          message.feePayer = reader.string();
-          break;
-        case 7:
           message.feeAmount.push(Coin.decode(reader, reader.uint32()));
           break;
         default:
@@ -510,7 +498,7 @@ export const OracleParams = {
     if (object.scriptId !== undefined && object.scriptId !== null) {
       message.scriptId = Long.fromString(object.scriptId);
     } else {
-      message.scriptId = Long.ZERO;
+      message.scriptId = Long.UZERO;
     }
     if (object.askCount !== undefined && object.askCount !== null) {
       message.askCount = Long.fromString(object.askCount);
@@ -532,11 +520,6 @@ export const OracleParams = {
     } else {
       message.executeGas = Long.UZERO;
     }
-    if (object.feePayer !== undefined && object.feePayer !== null) {
-      message.feePayer = String(object.feePayer);
-    } else {
-      message.feePayer = "";
-    }
     if (object.feeAmount !== undefined && object.feeAmount !== null) {
       for (const e of object.feeAmount) {
         message.feeAmount.push(Coin.fromJSON(e));
@@ -548,7 +531,7 @@ export const OracleParams = {
   toJSON(message: OracleParams): unknown {
     const obj: any = {};
     message.scriptId !== undefined &&
-      (obj.scriptId = (message.scriptId || Long.ZERO).toString());
+      (obj.scriptId = (message.scriptId || Long.UZERO).toString());
     message.askCount !== undefined &&
       (obj.askCount = (message.askCount || Long.UZERO).toString());
     message.minCount !== undefined &&
@@ -557,7 +540,6 @@ export const OracleParams = {
       (obj.prepareGas = (message.prepareGas || Long.UZERO).toString());
     message.executeGas !== undefined &&
       (obj.executeGas = (message.executeGas || Long.UZERO).toString());
-    message.feePayer !== undefined && (obj.feePayer = message.feePayer);
     if (message.feeAmount) {
       obj.feeAmount = message.feeAmount.map((e) =>
         e ? Coin.toJSON(e) : undefined
@@ -574,7 +556,7 @@ export const OracleParams = {
     if (object.scriptId !== undefined && object.scriptId !== null) {
       message.scriptId = object.scriptId as Long;
     } else {
-      message.scriptId = Long.ZERO;
+      message.scriptId = Long.UZERO;
     }
     if (object.askCount !== undefined && object.askCount !== null) {
       message.askCount = object.askCount as Long;
@@ -595,11 +577,6 @@ export const OracleParams = {
       message.executeGas = object.executeGas as Long;
     } else {
       message.executeGas = Long.UZERO;
-    }
-    if (object.feePayer !== undefined && object.feePayer !== null) {
-      message.feePayer = object.feePayer;
-    } else {
-      message.feePayer = "";
     }
     if (object.feeAmount !== undefined && object.feeAmount !== null) {
       for (const e of object.feeAmount) {

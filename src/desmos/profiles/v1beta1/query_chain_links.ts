@@ -30,20 +30,20 @@ export interface QueryUserChainLinkResponse {
 }
 
 /**
- * QueryUserChainLinksRequest is the request type for the
- * Query/UserChainLinks RPC endpoint
+ * QueryChainLinksRequest is the request type for the
+ * Query/ChainLinks RPC endpoint
  */
-export interface QueryUserChainLinksRequest {
+export interface QueryChainLinksRequest {
   user: string;
   /** Pagination defines an optional pagination for the request */
   pagination?: PageRequest;
 }
 
 /**
- * QueryUserChainLinksResponse is the response type for the
- * Query/UserChainLinks RPC method.
+ * QueryChainLinksResponse is the response type for the
+ * Query/ChainLinks RPC method.
  */
-export interface QueryUserChainLinksResponse {
+export interface QueryChainLinksResponse {
   links: ChainLink[];
   /** Pagination defines the pagination response */
   pagination?: PageResponse;
@@ -226,11 +226,11 @@ export const QueryUserChainLinkResponse = {
   },
 };
 
-const baseQueryUserChainLinksRequest: object = { user: "" };
+const baseQueryChainLinksRequest: object = { user: "" };
 
-export const QueryUserChainLinksRequest = {
+export const QueryChainLinksRequest = {
   encode(
-    message: QueryUserChainLinksRequest,
+    message: QueryChainLinksRequest,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.user !== "") {
@@ -245,12 +245,10 @@ export const QueryUserChainLinksRequest = {
   decode(
     input: _m0.Reader | Uint8Array,
     length?: number
-  ): QueryUserChainLinksRequest {
+  ): QueryChainLinksRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryUserChainLinksRequest,
-    } as QueryUserChainLinksRequest;
+    const message = { ...baseQueryChainLinksRequest } as QueryChainLinksRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -268,10 +266,8 @@ export const QueryUserChainLinksRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryUserChainLinksRequest {
-    const message = {
-      ...baseQueryUserChainLinksRequest,
-    } as QueryUserChainLinksRequest;
+  fromJSON(object: any): QueryChainLinksRequest {
+    const message = { ...baseQueryChainLinksRequest } as QueryChainLinksRequest;
     if (object.user !== undefined && object.user !== null) {
       message.user = String(object.user);
     } else {
@@ -285,7 +281,7 @@ export const QueryUserChainLinksRequest = {
     return message;
   },
 
-  toJSON(message: QueryUserChainLinksRequest): unknown {
+  toJSON(message: QueryChainLinksRequest): unknown {
     const obj: any = {};
     message.user !== undefined && (obj.user = message.user);
     message.pagination !== undefined &&
@@ -296,11 +292,9 @@ export const QueryUserChainLinksRequest = {
   },
 
   fromPartial(
-    object: DeepPartial<QueryUserChainLinksRequest>
-  ): QueryUserChainLinksRequest {
-    const message = {
-      ...baseQueryUserChainLinksRequest,
-    } as QueryUserChainLinksRequest;
+    object: DeepPartial<QueryChainLinksRequest>
+  ): QueryChainLinksRequest {
+    const message = { ...baseQueryChainLinksRequest } as QueryChainLinksRequest;
     if (object.user !== undefined && object.user !== null) {
       message.user = object.user;
     } else {
@@ -315,11 +309,11 @@ export const QueryUserChainLinksRequest = {
   },
 };
 
-const baseQueryUserChainLinksResponse: object = {};
+const baseQueryChainLinksResponse: object = {};
 
-export const QueryUserChainLinksResponse = {
+export const QueryChainLinksResponse = {
   encode(
-    message: QueryUserChainLinksResponse,
+    message: QueryChainLinksResponse,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     for (const v of message.links) {
@@ -337,12 +331,12 @@ export const QueryUserChainLinksResponse = {
   decode(
     input: _m0.Reader | Uint8Array,
     length?: number
-  ): QueryUserChainLinksResponse {
+  ): QueryChainLinksResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = {
-      ...baseQueryUserChainLinksResponse,
-    } as QueryUserChainLinksResponse;
+      ...baseQueryChainLinksResponse,
+    } as QueryChainLinksResponse;
     message.links = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -361,10 +355,10 @@ export const QueryUserChainLinksResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryUserChainLinksResponse {
+  fromJSON(object: any): QueryChainLinksResponse {
     const message = {
-      ...baseQueryUserChainLinksResponse,
-    } as QueryUserChainLinksResponse;
+      ...baseQueryChainLinksResponse,
+    } as QueryChainLinksResponse;
     message.links = [];
     if (object.links !== undefined && object.links !== null) {
       for (const e of object.links) {
@@ -379,7 +373,7 @@ export const QueryUserChainLinksResponse = {
     return message;
   },
 
-  toJSON(message: QueryUserChainLinksResponse): unknown {
+  toJSON(message: QueryChainLinksResponse): unknown {
     const obj: any = {};
     if (message.links) {
       obj.links = message.links.map((e) =>
@@ -396,11 +390,11 @@ export const QueryUserChainLinksResponse = {
   },
 
   fromPartial(
-    object: DeepPartial<QueryUserChainLinksResponse>
-  ): QueryUserChainLinksResponse {
+    object: DeepPartial<QueryChainLinksResponse>
+  ): QueryChainLinksResponse {
     const message = {
-      ...baseQueryUserChainLinksResponse,
-    } as QueryUserChainLinksResponse;
+      ...baseQueryChainLinksResponse,
+    } as QueryChainLinksResponse;
     message.links = [];
     if (object.links !== undefined && object.links !== null) {
       for (const e of object.links) {

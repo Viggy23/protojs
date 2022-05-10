@@ -36,20 +36,20 @@ export interface QueryUserApplicationLinkResponse {
 }
 
 /**
- * QueryUserApplicationLinksRequest represents the request used when querying
+ * QueryApplicationLinksRequest represents the request used when querying
  * the application links of a specific user
  */
-export interface QueryUserApplicationLinksRequest {
+export interface QueryApplicationLinksRequest {
   user: string;
   /** Pagination defines an optional pagination for the request */
   pagination?: PageRequest;
 }
 
 /**
- * QueryUserApplicationLinksResponse represents the response to the query used
+ * QueryApplicationLinksResponse represents the response to the query used
  * to get the application links for a specific user
  */
-export interface QueryUserApplicationLinksResponse {
+export interface QueryApplicationLinksResponse {
   links: ApplicationLink[];
   /** Pagination defines the pagination response */
   pagination?: PageResponse;
@@ -252,11 +252,11 @@ export const QueryUserApplicationLinkResponse = {
   },
 };
 
-const baseQueryUserApplicationLinksRequest: object = { user: "" };
+const baseQueryApplicationLinksRequest: object = { user: "" };
 
-export const QueryUserApplicationLinksRequest = {
+export const QueryApplicationLinksRequest = {
   encode(
-    message: QueryUserApplicationLinksRequest,
+    message: QueryApplicationLinksRequest,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.user !== "") {
@@ -271,12 +271,12 @@ export const QueryUserApplicationLinksRequest = {
   decode(
     input: _m0.Reader | Uint8Array,
     length?: number
-  ): QueryUserApplicationLinksRequest {
+  ): QueryApplicationLinksRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = {
-      ...baseQueryUserApplicationLinksRequest,
-    } as QueryUserApplicationLinksRequest;
+      ...baseQueryApplicationLinksRequest,
+    } as QueryApplicationLinksRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -294,10 +294,10 @@ export const QueryUserApplicationLinksRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryUserApplicationLinksRequest {
+  fromJSON(object: any): QueryApplicationLinksRequest {
     const message = {
-      ...baseQueryUserApplicationLinksRequest,
-    } as QueryUserApplicationLinksRequest;
+      ...baseQueryApplicationLinksRequest,
+    } as QueryApplicationLinksRequest;
     if (object.user !== undefined && object.user !== null) {
       message.user = String(object.user);
     } else {
@@ -311,7 +311,7 @@ export const QueryUserApplicationLinksRequest = {
     return message;
   },
 
-  toJSON(message: QueryUserApplicationLinksRequest): unknown {
+  toJSON(message: QueryApplicationLinksRequest): unknown {
     const obj: any = {};
     message.user !== undefined && (obj.user = message.user);
     message.pagination !== undefined &&
@@ -322,11 +322,11 @@ export const QueryUserApplicationLinksRequest = {
   },
 
   fromPartial(
-    object: DeepPartial<QueryUserApplicationLinksRequest>
-  ): QueryUserApplicationLinksRequest {
+    object: DeepPartial<QueryApplicationLinksRequest>
+  ): QueryApplicationLinksRequest {
     const message = {
-      ...baseQueryUserApplicationLinksRequest,
-    } as QueryUserApplicationLinksRequest;
+      ...baseQueryApplicationLinksRequest,
+    } as QueryApplicationLinksRequest;
     if (object.user !== undefined && object.user !== null) {
       message.user = object.user;
     } else {
@@ -341,11 +341,11 @@ export const QueryUserApplicationLinksRequest = {
   },
 };
 
-const baseQueryUserApplicationLinksResponse: object = {};
+const baseQueryApplicationLinksResponse: object = {};
 
-export const QueryUserApplicationLinksResponse = {
+export const QueryApplicationLinksResponse = {
   encode(
-    message: QueryUserApplicationLinksResponse,
+    message: QueryApplicationLinksResponse,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     for (const v of message.links) {
@@ -363,12 +363,12 @@ export const QueryUserApplicationLinksResponse = {
   decode(
     input: _m0.Reader | Uint8Array,
     length?: number
-  ): QueryUserApplicationLinksResponse {
+  ): QueryApplicationLinksResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = {
-      ...baseQueryUserApplicationLinksResponse,
-    } as QueryUserApplicationLinksResponse;
+      ...baseQueryApplicationLinksResponse,
+    } as QueryApplicationLinksResponse;
     message.links = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -387,10 +387,10 @@ export const QueryUserApplicationLinksResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryUserApplicationLinksResponse {
+  fromJSON(object: any): QueryApplicationLinksResponse {
     const message = {
-      ...baseQueryUserApplicationLinksResponse,
-    } as QueryUserApplicationLinksResponse;
+      ...baseQueryApplicationLinksResponse,
+    } as QueryApplicationLinksResponse;
     message.links = [];
     if (object.links !== undefined && object.links !== null) {
       for (const e of object.links) {
@@ -405,7 +405,7 @@ export const QueryUserApplicationLinksResponse = {
     return message;
   },
 
-  toJSON(message: QueryUserApplicationLinksResponse): unknown {
+  toJSON(message: QueryApplicationLinksResponse): unknown {
     const obj: any = {};
     if (message.links) {
       obj.links = message.links.map((e) =>
@@ -422,11 +422,11 @@ export const QueryUserApplicationLinksResponse = {
   },
 
   fromPartial(
-    object: DeepPartial<QueryUserApplicationLinksResponse>
-  ): QueryUserApplicationLinksResponse {
+    object: DeepPartial<QueryApplicationLinksResponse>
+  ): QueryApplicationLinksResponse {
     const message = {
-      ...baseQueryUserApplicationLinksResponse,
-    } as QueryUserApplicationLinksResponse;
+      ...baseQueryApplicationLinksResponse,
+    } as QueryApplicationLinksResponse;
     message.links = [];
     if (object.links !== undefined && object.links !== null) {
       for (const e of object.links) {

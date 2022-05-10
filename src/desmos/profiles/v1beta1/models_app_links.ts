@@ -138,9 +138,9 @@ export interface Result {
  * verified
  */
 export interface Result_Success {
-  /** Value that has be signed by the profile */
+  /** Hex-encoded value that has be signed by the profile */
   value: string;
-  /** Signature that has been produced by signing the value */
+  /** Hex-encoded signature that has been produced by signing the value */
   signature: string;
 }
 
@@ -385,8 +385,8 @@ export const Data = {
 };
 
 const baseOracleRequest: object = {
-  id: Long.ZERO,
-  oracleScriptId: Long.ZERO,
+  id: Long.UZERO,
+  oracleScriptId: Long.UZERO,
   clientId: "",
 };
 
@@ -396,10 +396,10 @@ export const OracleRequest = {
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (!message.id.isZero()) {
-      writer.uint32(8).int64(message.id);
+      writer.uint32(8).uint64(message.id);
     }
     if (!message.oracleScriptId.isZero()) {
-      writer.uint32(16).int64(message.oracleScriptId);
+      writer.uint32(16).uint64(message.oracleScriptId);
     }
     if (message.callData !== undefined) {
       OracleRequest_CallData.encode(
@@ -421,10 +421,10 @@ export const OracleRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.id = reader.int64() as Long;
+          message.id = reader.uint64() as Long;
           break;
         case 2:
-          message.oracleScriptId = reader.int64() as Long;
+          message.oracleScriptId = reader.uint64() as Long;
           break;
         case 3:
           message.callData = OracleRequest_CallData.decode(
@@ -448,12 +448,12 @@ export const OracleRequest = {
     if (object.id !== undefined && object.id !== null) {
       message.id = Long.fromString(object.id);
     } else {
-      message.id = Long.ZERO;
+      message.id = Long.UZERO;
     }
     if (object.oracleScriptId !== undefined && object.oracleScriptId !== null) {
       message.oracleScriptId = Long.fromString(object.oracleScriptId);
     } else {
-      message.oracleScriptId = Long.ZERO;
+      message.oracleScriptId = Long.UZERO;
     }
     if (object.callData !== undefined && object.callData !== null) {
       message.callData = OracleRequest_CallData.fromJSON(object.callData);
@@ -470,9 +470,10 @@ export const OracleRequest = {
 
   toJSON(message: OracleRequest): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = (message.id || Long.ZERO).toString());
+    message.id !== undefined &&
+      (obj.id = (message.id || Long.UZERO).toString());
     message.oracleScriptId !== undefined &&
-      (obj.oracleScriptId = (message.oracleScriptId || Long.ZERO).toString());
+      (obj.oracleScriptId = (message.oracleScriptId || Long.UZERO).toString());
     message.callData !== undefined &&
       (obj.callData = message.callData
         ? OracleRequest_CallData.toJSON(message.callData)
@@ -486,12 +487,12 @@ export const OracleRequest = {
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id as Long;
     } else {
-      message.id = Long.ZERO;
+      message.id = Long.UZERO;
     }
     if (object.oracleScriptId !== undefined && object.oracleScriptId !== null) {
       message.oracleScriptId = object.oracleScriptId as Long;
     } else {
-      message.oracleScriptId = Long.ZERO;
+      message.oracleScriptId = Long.UZERO;
     }
     if (object.callData !== undefined && object.callData !== null) {
       message.callData = OracleRequest_CallData.fromPartial(object.callData);

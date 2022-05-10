@@ -15,7 +15,7 @@ PROTO_DIR="$SCRIPT_DIR/../proto-files"
 # Directory where will be placed the file generated from ts-proto
 SRC_DIR="$SCRIPT_DIR/../src"
 # Url from where will be downloaded the desmos proto files
-DESMOS_VERSION="1.0.2"
+DESMOS_VERSION="2.3.1"
 SRC_URL="https://github.com/desmos-labs/desmos/archive/refs/tags/v$DESMOS_VERSION.zip"
 
 

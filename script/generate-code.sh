@@ -24,18 +24,6 @@ protoc \
   --proto_path="$DESMOS_DIR" \
   --proto_path="$THIRD_PARTY_DIR" \
   --ts_proto_yarn_2_opt="esModuleInterop=true,forceLong=long,useOptionals=true,exportCommonSymbols=false" \
-  "$DESMOS_DIR/desmos/fees/v1beta1/genesis.proto" \
-  "$DESMOS_DIR/desmos/fees/v1beta1/min_fee.proto" \
-  "$DESMOS_DIR/desmos/fees/v1beta1/params.proto" \
-  "$DESMOS_DIR/desmos/fees/v1beta1/query.proto" \
-  "$DESMOS_DIR/desmos/posts/v1beta1/genesis.proto" \
-  "$DESMOS_DIR/desmos/posts/v1beta1/msgs.proto" \
-  "$DESMOS_DIR/desmos/posts/v1beta1/params.proto" \
-  "$DESMOS_DIR/desmos/posts/v1beta1/polls.proto" \
-  "$DESMOS_DIR/desmos/posts/v1beta1/posts.proto" \
-  "$DESMOS_DIR/desmos/posts/v1beta1/query.proto" \
-  "$DESMOS_DIR/desmos/posts/v1beta1/reactions.proto" \
-  "$DESMOS_DIR/desmos/posts/v1beta1/report.proto" \
   "$DESMOS_DIR/desmos/profiles/v1beta1/client/cli.proto" \
   "$DESMOS_DIR/desmos/profiles/v1beta1/genesis.proto" \
   "$DESMOS_DIR/desmos/profiles/v1beta1/models_app_links.proto" \
@@ -57,8 +45,4 @@ protoc \
   "$DESMOS_DIR/desmos/profiles/v1beta1/query_dtag_requests.proto" \
   "$DESMOS_DIR/desmos/profiles/v1beta1/query_params.proto" \
   "$DESMOS_DIR/desmos/profiles/v1beta1/query_profile.proto" \
-  "$DESMOS_DIR/desmos/profiles/v1beta1/query_relationships.proto" \
-  "$DESMOS_DIR/desmos/subspaces/v1beta1/genesis.proto" \
-  "$DESMOS_DIR/desmos/subspaces/v1beta1/msgs.proto" \
-  "$DESMOS_DIR/desmos/subspaces/v1beta1/query.proto" \
-  "$DESMOS_DIR/desmos/subspaces/v1beta1/subspace.proto"
+  "$DESMOS_DIR/desmos/profiles/v1beta1/query_relationships.proto"
